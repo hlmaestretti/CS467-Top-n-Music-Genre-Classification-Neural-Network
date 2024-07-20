@@ -4,6 +4,7 @@ import pandas as pd
 import librosa
 import h5py
 
+
 def extract_gtzan_features(file_path):
     audio, sr = librosa.load(file_path, sr=None)
     
@@ -15,7 +16,6 @@ def extract_gtzan_features(file_path):
     loudness = librosa.feature.rms(y=audio)[0]
     
     chroma = librosa.feature.chroma_cqt(y=audio, sr=sr)
-    tonnetz = librosa.feature.tonnetz(y=audio, sr=sr)
     
     # Correctly calculate key and mode
     chroma_sum = np.sum(chroma, axis=1)
@@ -45,16 +45,19 @@ def extract_gtzan_features(file_path):
         'chroma_mean': np.mean(chroma, axis=1).tolist()
     }
 
+
 def extract_msd_features(file_path):
     with h5py.File(file_path, 'r') as f:
         duration = f['analysis/songs']['duration'][0] if 'duration' in f['analysis/songs'].dtype.names else None
         segments_timbre = f['analysis/segments_timbre'][:] if 'analysis/segments_timbre' in f else None
         segments_pitches = f['analysis/segments_pitches'][:] if 'analysis/segments_pitches' in f else None
         tempo = f['analysis/songs']['tempo'][0] if 'tempo' in f['analysis/songs'].dtype.names else None
-        segments_loudness_max = f['analysis/segments_loudness_max'][:] if 'analysis/segments_loudness_max' in f else None
+        segments_loudness_max = (f['analysis/segments_loudness_max'][:]
+                                 if 'analysis/segments_loudness_max' in f else None)
         key = f['analysis/songs']['key'][0] if 'key' in f['analysis/songs'].dtype.names else None
         mode = f['analysis/songs']['mode'][0] if 'mode' in f['analysis/songs'].dtype.names else None
-        time_signature = f['analysis/songs']['time_signature'][0] if 'time_signature' in f['analysis/songs'].dtype.names else None
+        time_signature = (f['analysis/songs']['time_signature'][0]
+                          if 'time_signature' in f['analysis/songs'].dtype.names else None)
 
     return {
         'duration': duration,
@@ -70,6 +73,7 @@ def extract_msd_features(file_path):
         'time_signature': time_signature,
         'chroma_mean': np.mean(segments_pitches, axis=0).tolist() if segments_pitches is not None else None
     }
+
 
 # Extract GTZAN features
 gtzan_data = []

@@ -7,6 +7,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
 import ast
 
+
 def convert_gtzan_to_h5(input_dir, output_dir):
     os.makedirs(output_dir, exist_ok=True)
     for genre in os.listdir(input_dir):
@@ -22,6 +23,7 @@ def convert_gtzan_to_h5(input_dir, output_dir):
                         hf.create_dataset('sr', data=sr)
                         hf.attrs['genre'] = genre
     print("GTZAN conversion to .h5 format complete.")
+
 
 # Convert GTZAN to .h5
 convert_gtzan_to_h5('./genres', './gtzan_h5')
@@ -43,7 +45,9 @@ most_common_genre = combined_df['genre'].value_counts().index[0]
 print(f"Most common genre: {most_common_genre}")
 
 # Limit the most common genre to 500 songs
-common_genre_df = combined_df[combined_df['genre'] == most_common_genre].sample(n=min(500, combined_df['genre'].value_counts()[most_common_genre]), random_state=42)
+common_genre_df = combined_df[combined_df['genre'] == most_common_genre].sample(
+    n=min(500, combined_df['genre'].value_counts()[most_common_genre]), random_state=42
+)
 other_genres_df = combined_df[combined_df['genre'] != most_common_genre]
 combined_df = pd.concat([common_genre_df, other_genres_df], ignore_index=True)
 
@@ -52,7 +56,7 @@ genre_counts = combined_df['genre'].value_counts()
 genres_to_keep = genre_counts[genre_counts >= 70].index
 combined_df = combined_df[combined_df['genre'].isin(genres_to_keep)]
 
-# Function to safely convert string representations to float
+
 def safe_float_convert(x):
     if isinstance(x, str):
         try:
@@ -60,7 +64,7 @@ def safe_float_convert(x):
             if isinstance(parsed, list):
                 return parsed if len(parsed) > 1 else parsed[0]
             return float(parsed)
-        except:
+        except ValueError:
             return np.nan
     elif isinstance(x, list):
         return x if len(x) > 1 else x[0]
@@ -68,6 +72,7 @@ def safe_float_convert(x):
         return float(x)
     else:
         return np.nan
+
 
 # Apply safe conversion to all columns except 'filename' and 'genre'
 for col in combined_df.columns:
@@ -88,14 +93,19 @@ if 'duration' in combined_df.columns:
     combined_df['duration'] = np.abs(combined_df['duration'])
 
 # Normalize numeric features
-features_to_normalize = ['spectral_centroid_mean', 'spectral_rolloff_mean', 'tempo', 'mfcc1', 'mfcc2', 'mfcc3', 'loudness_mean']
+features_to_normalize = [
+    'spectral_centroid_mean', 'spectral_rolloff_mean', 'tempo',
+    'mfcc1', 'mfcc2', 'mfcc3', 'loudness_mean'
+]
 scaler = MinMaxScaler()
 combined_df[features_to_normalize] = scaler.fit_transform(combined_df[features_to_normalize])
 
 # Select final features
-final_features = ['filename', 'genre', 'duration', 'spectral_centroid_mean', 'spectral_rolloff_mean',
-                  'tempo', 'mfcc1', 'mfcc2', 'mfcc3', 'loudness_mean',
-                  'key', 'mode', 'time_signature', 'chroma_mean']
+final_features = [
+    'filename', 'genre', 'duration', 'spectral_centroid_mean', 'spectral_rolloff_mean',
+    'tempo', 'mfcc1', 'mfcc2', 'mfcc3', 'loudness_mean',
+    'key', 'mode', 'time_signature', 'chroma_mean'
+]
 final_features = [col for col in final_features if col in combined_df.columns]
 
 unified_df = combined_df[final_features]
