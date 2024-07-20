@@ -15,6 +15,7 @@ from sklearn.preprocessing import LabelEncoder
 from keras.utils import to_categorical
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten, Conv1D, MaxPooling1D
+from keras.callbacks import EarlyStopping
 
 
 def load_data(data_path, metadata_path):
@@ -70,6 +71,13 @@ if __name__ == "__main__":
     X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
     X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], 1)
 
-    model.fit(X_train, y_train, batch_size=wandb.config.batch_size, epochs=wandb.config.epochs,
-              validation_data=(X_test, y_test), verbose=1, callbacks=[wandb.keras.WandbCallback()])
+    # Setting batch size and epoch
+    batch_size = 32
+    epochs = 20
+
+    # Define early stopping callback
+    early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+
+    model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs,
+              validation_data=(X_test, y_test), verbose=1, callbacks=[early_stopping])
 
