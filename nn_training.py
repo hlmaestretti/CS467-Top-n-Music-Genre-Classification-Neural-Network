@@ -6,15 +6,11 @@ https://wandb.ai/mostafaibrahim17/ml-articles/reports/An-Introduction-to-Audio-C
 """
 
 
-import os
-import numpy as np
-import pandas as pd
-import librosa
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from keras.utils import to_categorical
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten, Conv1D, MaxPooling1D
+from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D
 from keras.callbacks import EarlyStopping
 
 
@@ -27,9 +23,6 @@ def load_data(data_path, metadata_path):
     :return: 2 arrays, one containing the feautures of the songs and one containing the labels
     """
     pass
-
-
-
 
 
 if __name__ == "__main__":
@@ -78,6 +71,6 @@ if __name__ == "__main__":
     # Define early stopping callback
     early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
 
+
     model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs,
               validation_data=(X_test, y_test), verbose=1, callbacks=[early_stopping])
-
