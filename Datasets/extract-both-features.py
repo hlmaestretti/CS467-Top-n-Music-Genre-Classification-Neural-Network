@@ -7,16 +7,16 @@ import h5py
 
 def extract_gtzan_features(file_path):
     audio, sr = librosa.load(file_path, sr=None)
-    
+
     duration = librosa.get_duration(y=audio, sr=sr)
     spectral_centroids = librosa.feature.spectral_centroid(y=audio, sr=sr)[0]
     spectral_rolloff = librosa.feature.spectral_rolloff(y=audio, sr=sr)[0]
     tempo, _ = librosa.beat.beat_track(y=audio, sr=sr)
     mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=13)
     loudness = librosa.feature.rms(y=audio)[0]
-    
+
     chroma = librosa.feature.chroma_cqt(y=audio, sr=sr)
-    
+
     # Correctly calculate key and mode
     chroma_sum = np.sum(chroma, axis=1)
     key = np.argmax(chroma_sum)
