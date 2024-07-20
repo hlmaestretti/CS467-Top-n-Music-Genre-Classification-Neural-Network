@@ -17,11 +17,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from keras.utils import to_categorical
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten, Conv1D, MaxPooling1D
+from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D
 import wandb
 
 
-wandb.init(project='audio_classification_using_W&B', entity='Music classification test', config={"batch_size": 32, "epochs": 100})
+wandb.init(project='audio_classification_using_W&B', entity='Music classification test', 
+           config={"batch_size": 32, "epochs": 100})
 
 
 def load_data(data_path, metadata_path):
@@ -80,10 +81,6 @@ model.add(Dense(len(le.classes_), activation='softmax'))
 
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-
-
-
 
 
 # TESTING Portion
