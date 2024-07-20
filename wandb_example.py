@@ -21,7 +21,7 @@ from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D
 import wandb
 
 
-wandb.init(project='audio_classification_using_W&B', entity='Music classification test', 
+wandb.init(project='audio_classification_using_W&B', entity='Music classification test',
            config={"batch_size": 32, "epochs": 100})
 
 
@@ -53,12 +53,10 @@ data_path = "/kaggle/input/urbansound8k"
 metadata_path = "/kaggle/input/urbansound8k/UrbanSound8K.csv"
 features, labels = load_data(data_path, metadata_path)
 
-
 # Encode labels
 le = LabelEncoder()
 labels_encoded = le.fit_transform(labels)
 labels_onehot = to_categorical(labels_encoded)
-
 
 # Split the data into training and testing sets. X data will be used to contain the features
 # while y contains the labels.
@@ -79,9 +77,7 @@ model.add(Dense(512, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(len(le.classes_), activation='softmax'))
 
-
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
 
 # TESTING Portion
 def make_predictions(model, le, file_path):
@@ -96,14 +92,11 @@ def make_predictions(model, le, file_path):
 
 wandb_table = wandb.Table(columns=["File", "True Label", "Old Prediction", "New Prediction"])
 
-
 # Save the initial weights
 initial_weights = model.get_weights()
 
-
 # Dictionary to store old predictions
 old_predictions = {}
-
 
 # List of test files and their true labels
 test_files = [
@@ -114,29 +107,23 @@ test_files = [
     ("/kaggle/input/urbansound8k/fold1/103074-7-4-3.wav", "Jack hammer")
 ]
 
-
 # Make predictions before training
 for file_path, true_label in test_files:
     predicted_label_before = make_predictions(model, le, file_path)
     old_predictions[file_path] = predicted_label_before
 
-
 X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
 X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], 1)
 
-
 model.fit(X_train, y_train, batch_size=wandb.config.batch_size, epochs=wandb.config.epochs,
           validation_data=(X_test, y_test), verbose=1, callbacks=[wandb.keras.WandbCallback()])
-
 
 # Make predictions after training
 for file_path, true_label in test_files:
     predicted_label_after = make_predictions(model, le, file_path)
     wandb_table.add_data(file_path, true_label, old_predictions[file_path], predicted_label_after)
 
-
 # Log the table to W&B
 wandb.log({"Predictions": wandb_table})
-
 
 wandb.finish()
