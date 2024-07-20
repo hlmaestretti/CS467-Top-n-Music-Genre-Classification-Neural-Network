@@ -43,7 +43,6 @@ if __name__ == "__main__":
                                                         stratify=labels_onehot
                                                         )
 
-
     # Create and compile the NN
     input_shape = (X_train.shape[1], 1)
     model = Sequential()
@@ -70,7 +69,6 @@ if __name__ == "__main__":
 
     # Define early stopping callback
     early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
-
 
     model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs,
               validation_data=(X_test, y_test), verbose=1, callbacks=[early_stopping])
