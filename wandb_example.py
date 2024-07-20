@@ -79,6 +79,7 @@ model.add(Dense(len(le.classes_), activation='softmax'))
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
+
 # TESTING Portion
 def make_predictions(model, le, file_path):
     audio, sample_rate = librosa.load(file_path, sr=22050)
