@@ -22,4 +22,4 @@ def convert_gtzan_to_h5(input_dir, output_dir):
 
 # Convert GTZAN to .h5
 convert_gtzan_to_h5('./genres', './gtzan_h5')
-print("GTZAN conversion and feature preprocessing complete.")
+print("GTZAN conversion complete.")
