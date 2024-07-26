@@ -36,4 +36,3 @@ if __name__ == '__main__':
         out = ('C:/Users/wwwhu/PycharmProjects/CS467-Top-n-Music-Genre-Classification-Neural-Network/Github-ignore'
                '/unified dataset/gtzan-output')
         convert_gtzan_to_h5(inp, out)
-
