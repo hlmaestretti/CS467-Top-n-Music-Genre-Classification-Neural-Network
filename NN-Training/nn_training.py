@@ -13,12 +13,13 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D
 from keras.callbacks import EarlyStopping
 import pandas as pd
+import joblib
 
 
 def load_data(data_path):
     """
-    The load_data function will correctly load the training database such that the audio file is correctly related to
-    it's associated data in an excel sheet.
+    The load_data function will correctly load the training database such that the audio file
+    is correctly related to it's associated data in an excel sheet.
     :param data_path: Excel sheet that contains the necessary data of each audio file
     :return: 2 arrays, one containing the features of the songs and one containing the labels
     """
@@ -44,13 +45,17 @@ def load_data(data_path):
     scaler = StandardScaler()
     features_scaled = scaler.fit_transform(features)
 
+    # Save the label encoder
+    joblib.dump(label_encoder, 'label_encoder.pkl')
+
     return features_scaled, labels_onehot
 
 
 def train_nn(data_path):
     """
-    The train_nn function takes a csv file containing the features and labels of a song and feeds it to a new ]
-    neural network. The neural network is designed to be a 1D Convolution Neural Network.
+    The train_nn function takes a csv file containing the features and labels of a song
+    and feeds it to a new neural network. The neural network is designed to be a 1D
+    Convolution Neural Network.
     :param data_path: The csv file containing the labels and features of each song in the dataset.
     :return: None, but creates a .keras files that holds the nn
     """
@@ -61,7 +66,7 @@ def train_nn(data_path):
     num_genres = labels.shape[1]
 
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(features,
+    x_train, x_test, y_train, y_test = train_test_split(features,
                                                         labels,
                                                         test_size=0.2,
                                                         random_state=42,
@@ -69,7 +74,7 @@ def train_nn(data_path):
                                                         )
 
     # Create and compile the NN
-    input_shape = (X_train.shape[1], 1)
+    input_shape = (x_train.shape[1], 1)
     model = Sequential()
     model.add(Conv1D(64, 3, padding='same', activation='relu', input_shape=input_shape))
     model.add(MaxPooling1D(pool_size=2))
@@ -85,8 +90,8 @@ def train_nn(data_path):
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # Reshape the x data from array to Conv1D so that we can feed data into model
-    X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
-    X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], 1)
+    x_train = x_train.reshape(x_train.shape[0], x_train.shape[1], 1)
+    x_test = x_test.reshape(x_test.shape[0], x_test.shape[1], 1)
 
     # Setting batch size and epoch
     batch_size = 32
@@ -95,8 +100,8 @@ def train_nn(data_path):
     # Define early stopping callback
     early_stopping = EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True)
 
-    model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs,
-              validation_data=(X_test, y_test), verbose=1, callbacks=[early_stopping])
+    model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs,
+              validation_data=(x_test, y_test), verbose=1, callbacks=[early_stopping])
 
     # Save the training
     model.save('trained_model.keras')
