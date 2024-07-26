@@ -49,7 +49,7 @@ class TestAudioConverter(unittest.TestCase):
         """
         with self.assertRaises(ValueError):
             convert_audio(self.input_file, "invalid_format")
-    
+
     def test_4(self):
         """
         Tests if the output format is supported
