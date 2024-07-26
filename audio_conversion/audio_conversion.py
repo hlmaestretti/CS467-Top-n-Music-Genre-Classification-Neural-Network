@@ -22,7 +22,8 @@ def convert_audio(input_file, output_format):
     output_file = f"{file_name}.{output_format}"
 
     try:
-        audio.export(output_file, format=output_format)
+        with open(output_file, 'wb') as f:
+            audio.export(f, format=output_format)
         print(f"File has been converted to {output_file}")
     except Exception as e:
         raise ValueError(
@@ -38,6 +39,14 @@ if __name__ == "__main__":
     if not input_file:
         print("No file selected.")
     else:
+        supported_formats = ['wav', 'mp3', 'au', 'ogg', 'flac']
         output_format = input(
-            "Enter desired output format (example: wav, mp3, au): ")
+            "Enter desired output format (example: wav, mp3, au, ogg, flac):"
+            ).strip().lower()
+
+    if output_format not in supported_formats:
+        supported = ', '.join(supported_formats)
+        print(f"Unsupported format: {output_format}. "
+              f"Supported formats are: {supported}")
+    else:
         convert_audio(input_file, output_format)

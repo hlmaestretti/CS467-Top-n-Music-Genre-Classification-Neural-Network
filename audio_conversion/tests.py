@@ -13,10 +13,12 @@ class TestAudioConverter(unittest.TestCase):
         self.input_file = "test_audio.mp3"
         self.output_file_wav = "test_audio.wav"
         self.output_file_invalid = "test_audio.invalid"
+        self.supported_formats = ['wav', 'mp3', 'au', 'ogg', 'flac']
 
         if not os.path.isfile(self.input_file):
             sine_wave = Sine(440).to_audio_segment(duration=20000)
-            sine_wave.export(self.input_file, format="mp3")
+            with open(self.input_file, 'wb') as f:
+                sine_wave.export(f, format="mp3")
 
     def tearDown(self):
         """
@@ -47,6 +49,13 @@ class TestAudioConverter(unittest.TestCase):
         """
         with self.assertRaises(ValueError):
             convert_audio(self.input_file, "invalid_format")
+    
+    def test_4(self):
+        """
+        Tests if the output format is supported
+        """
+        for pdf in self.supported_formats:
+            self.assertIn(pdf, self.supported_formats)
 
 
 if __name__ == "__main__":
