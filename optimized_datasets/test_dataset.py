@@ -22,7 +22,8 @@ def load_data(h5_folder):
     """
     features = []
     labels = []
-    feature_length = 102  # 63 features, but some features (like timbre_mean, pitches_mean, etc.) are actually arrays with multiple values
+    # 63 features, but some features (like timbre_mean, pitches_mean, etc.) are actually arrays with multiple values
+    feature_length = 102
 
     for filename in os.listdir(h5_folder):
         if filename.endswith('.h5'):
@@ -40,9 +41,12 @@ def load_data(h5_folder):
                     rhythmic_complexity = (tempo * time_signature) / 120
 
                     # Extract timbre, pitches, and loudness data
-                    timbre = np.array(f['analysis/segments_timbre'][()]) if 'analysis/segments_timbre' in f else np.zeros((1, 12))
-                    pitches = np.array(f['analysis/segments_pitches'][()]) if 'analysis/segments_pitches' in f else np.zeros((1, 12))
-                    loudness = np.array(f['analysis/segments_loudness_max'][()]) if 'analysis/segments_loudness_max' in f else np.zeros(1)
+                    timbre = np.array(f['analysis/segments_timbre'][()]
+                                      ) if 'analysis/segments_timbre' in f else np.zeros((1, 12))
+                    pitches = np.array(f['analysis/segments_pitches'][()]
+                                       ) if 'analysis/segments_pitches' in f else np.zeros((1, 12))
+                    loudness = np.array(f['analysis/segments_loudness_max'][()]
+                                        ) if 'analysis/segments_loudness_max' in f else np.zeros(1)
 
                     # Enhanced feature extraction
                     timbre_mean = np.mean(timbre, axis=0)
@@ -60,13 +64,15 @@ def load_data(h5_folder):
                     timbre_entropy = entropy(np.abs(timbre) + 1e-10, axis=0)
                     timbre_energy = np.sum(timbre**2, axis=0)
                     timbre_flux = np.mean(np.diff(timbre, axis=0)**2)
-                    timbre_flatness = gmean(np.abs(timbre) + 1e-10, axis=0) / (np.mean(np.abs(timbre), axis=0) + 1e-10)
+                    timbre_flatness = gmean(
+                        np.abs(timbre) + 1e-10, axis=0) / (np.mean(np.abs(timbre), axis=0) + 1e-10)
 
                     pitches_mean = np.mean(pitches, axis=0)
                     pitches_std = np.std(pitches, axis=0)
                     pitches_skew = skew(pitches, axis=0)
                     pitches_kurtosis = kurtosis(pitches, axis=0)
-                    pitches_max = np.max(np.where(np.isnan(pitches), -np.inf, pitches), axis=0)
+                    pitches_max = np.max(
+                        np.where(np.isnan(pitches), -np.inf, pitches), axis=0)
                     pitches_min = np.min(pitches, axis=0)
                     pitches_range = pitches_max - pitches_min
                     pitches_median = np.median(pitches, axis=0)
@@ -76,7 +82,8 @@ def load_data(h5_folder):
                     pitches_entropy = entropy(pitches + 1e-10, axis=0)
                     pitches_energy = np.sum(pitches**2, axis=0)
                     pitches_flux = np.mean(np.diff(pitches, axis=0)**2)
-                    pitches_flatness = gmean(pitches + 1e-10, axis=0) / (np.mean(pitches + 1e-10, axis=0))
+                    pitches_flatness = gmean(
+                        pitches + 1e-10, axis=0) / (np.mean(pitches + 1e-10, axis=0))
 
                     loudness_mean = np.mean(loudness)
                     loudness_std = np.std(loudness)
@@ -97,9 +104,12 @@ def load_data(h5_folder):
                     n_fft = min(2048, timbre.shape[0])
 
                     # Additional spectral features with adjusted n_fft
-                    spec_cent = np.mean(spectral_centroid(y=timbre.T, sr=22050, n_fft=n_fft)[0])
-                    spec_bw = np.mean(spectral_bandwidth(y=timbre.T, sr=22050, n_fft=n_fft)[0])
-                    spec_rolloff = np.mean(spectral_rolloff(y=timbre.T, sr=22050, n_fft=n_fft)[0])
+                    spec_cent = np.mean(spectral_centroid(
+                        y=timbre.T, sr=22050, n_fft=n_fft)[0])
+                    spec_bw = np.mean(spectral_bandwidth(
+                        y=timbre.T, sr=22050, n_fft=n_fft)[0])
+                    spec_rolloff = np.mean(spectral_rolloff(
+                        y=timbre.T, sr=22050, n_fft=n_fft)[0])
                     zcr = np.mean(zero_crossing_rate(y=timbre.T)[0])
 
                     # Compute RMS - Root Mean Square
@@ -110,13 +120,16 @@ def load_data(h5_folder):
                     num_non_zero_rms_segments = np.sum(rms_values > 1e-10)
 
                     # Brightness and roughness
-                    brightness = np.nanmean(np.sum(timbre[:, 1:], axis=1) / (np.sum(timbre, axis=1) + 1e-10))
+                    brightness = np.nanmean(
+                        np.sum(timbre[:, 1:], axis=1) / (np.sum(timbre, axis=1) + 1e-10))
                     roughness = np.nanmean(np.abs(np.diff(loudness)))
-                    
+
                     # Melodic features
                     melodic_contour = np.argmax(pitches, axis=1)
-                    melodic_contour_direction = np.nanmean(np.diff(melodic_contour))
-                    melodic_contour_interval = np.nanmean(np.abs(np.diff(melodic_contour)))
+                    melodic_contour_direction = np.nanmean(
+                        np.diff(melodic_contour))
+                    melodic_contour_interval = np.nanmean(
+                        np.abs(np.diff(melodic_contour)))
 
                     # Rhythmic complexity features
                     onset_env = np.sum(np.diff(pitches, axis=0) > 0, axis=1)
@@ -131,25 +144,40 @@ def load_data(h5_folder):
 
                     # Concatenate all features
                     feature = np.concatenate([
-                        np.atleast_1d(duration), np.atleast_1d(tempo), np.atleast_1d(key), np.atleast_1d(mode), np.atleast_1d(time_signature),
-                        np.atleast_1d(rhythmic_complexity),  # Add the new feature here
-                        np.atleast_1d(loudness_mean), np.atleast_1d(loudness_std), np.atleast_1d(loudness_skew), np.atleast_1d(loudness_kurtosis),
-                        np.atleast_1d(loudness_max), np.atleast_1d(loudness_min), np.atleast_1d(loudness_range), np.atleast_1d(loudness_median),
-                        np.atleast_1d(loudness_q1), np.atleast_1d(loudness_q3), np.atleast_1d(loudness_iqr), np.atleast_1d(loudness_entropy), np.atleast_1d(loudness_energy), np.atleast_1d(loudness_flux),
-                        np.atleast_1d(timbre_mean), np.atleast_1d(timbre_std), np.atleast_1d(timbre_skew), np.atleast_1d(timbre_kurtosis),
-                        np.atleast_1d(timbre_max), np.atleast_1d(timbre_min), np.atleast_1d(timbre_range), np.atleast_1d(timbre_median), np.atleast_1d(timbre_variance),
-                        np.atleast_1d(timbre_q1), np.atleast_1d(timbre_q3), np.atleast_1d(timbre_iqr), np.atleast_1d(timbre_entropy), np.atleast_1d(timbre_energy), np.atleast_1d(timbre_flux), np.atleast_1d(timbre_flatness),
-                        np.atleast_1d(pitches_mean), np.atleast_1d(pitches_std), np.atleast_1d(pitches_skew), np.atleast_1d(pitches_kurtosis),
-                        np.atleast_1d(pitches_max), np.atleast_1d(pitches_min), np.atleast_1d(pitches_range), np.atleast_1d(pitches_median),
-                        np.atleast_1d(pitches_q1), np.atleast_1d(pitches_q3), np.atleast_1d(pitches_iqr), np.atleast_1d(pitches_entropy), np.atleast_1d(pitches_energy), np.atleast_1d(pitches_flux), np.atleast_1d(pitches_flatness),
-                        np.atleast_1d(spec_cent), np.atleast_1d(spec_bw), np.atleast_1d(spec_rolloff), np.atleast_1d(zcr), np.atleast_1d(rms_mean), np.atleast_1d(num_non_zero_rms_segments),   np.atleast_1d(brightness), np.atleast_1d(roughness), 
-                        np.atleast_1d(melodic_contour_direction), np.atleast_1d(melodic_contour_interval),
-                        np.atleast_1d(rhythmic_entropy), np.atleast_1d(rhythmic_irregularity)
+                        np.atleast_1d(duration), np.atleast_1d(tempo), np.atleast_1d(
+                            key), np.atleast_1d(mode), np.atleast_1d(time_signature),
+                        # Add the new feature here
+                        np.atleast_1d(rhythmic_complexity),
+                        np.atleast_1d(loudness_mean), np.atleast_1d(loudness_std), np.atleast_1d(
+                            loudness_skew), np.atleast_1d(loudness_kurtosis),
+                        np.atleast_1d(loudness_max), np.atleast_1d(loudness_min), np.atleast_1d(
+                            loudness_range), np.atleast_1d(loudness_median),
+                        np.atleast_1d(loudness_q1), np.atleast_1d(loudness_q3), np.atleast_1d(loudness_iqr), np.atleast_1d(
+                            loudness_entropy), np.atleast_1d(loudness_energy), np.atleast_1d(loudness_flux),
+                        np.atleast_1d(timbre_mean), np.atleast_1d(timbre_std), np.atleast_1d(
+                            timbre_skew), np.atleast_1d(timbre_kurtosis),
+                        np.atleast_1d(timbre_max), np.atleast_1d(timbre_min), np.atleast_1d(
+                            timbre_range), np.atleast_1d(timbre_median), np.atleast_1d(timbre_variance),
+                        np.atleast_1d(timbre_q1), np.atleast_1d(timbre_q3), np.atleast_1d(timbre_iqr), np.atleast_1d(
+                            timbre_entropy), np.atleast_1d(timbre_energy), np.atleast_1d(timbre_flux), np.atleast_1d(timbre_flatness),
+                        np.atleast_1d(pitches_mean), np.atleast_1d(pitches_std), np.atleast_1d(
+                            pitches_skew), np.atleast_1d(pitches_kurtosis),
+                        np.atleast_1d(pitches_max), np.atleast_1d(pitches_min), np.atleast_1d(
+                            pitches_range), np.atleast_1d(pitches_median),
+                        np.atleast_1d(pitches_q1), np.atleast_1d(pitches_q3), np.atleast_1d(pitches_iqr), np.atleast_1d(
+                            pitches_entropy), np.atleast_1d(pitches_energy), np.atleast_1d(pitches_flux), np.atleast_1d(pitches_flatness),
+                        np.atleast_1d(spec_cent), np.atleast_1d(spec_bw), np.atleast_1d(spec_rolloff), np.atleast_1d(zcr), np.atleast_1d(
+                            rms_mean), np.atleast_1d(num_non_zero_rms_segments),   np.atleast_1d(brightness), np.atleast_1d(roughness),
+                        np.atleast_1d(melodic_contour_direction), np.atleast_1d(
+                            melodic_contour_interval),
+                        np.atleast_1d(rhythmic_entropy), np.atleast_1d(
+                            rhythmic_irregularity)
                     ])
 
                     # Ensure feature vector has consistent length
                     if len(feature) < feature_length:
-                        feature = np.pad(feature, (0, feature_length - len(feature)))
+                        feature = np.pad(
+                            feature, (0, feature_length - len(feature)))
                     elif len(feature) > feature_length:
                         feature = feature[:feature_length]
 
@@ -170,6 +198,7 @@ def load_data(h5_folder):
     features_scaled = scaler.fit_transform(features)
 
     return features_scaled, labels_onehot
+
 
 def train_nn(h5_folder):
     """
@@ -193,7 +222,8 @@ def train_nn(h5_folder):
     # Create and compile the NN
     input_shape = (X_train.shape[1], 1)
     model = Sequential()
-    model.add(Conv1D(64, 3, padding='same', activation='relu', input_shape=input_shape))
+    model.add(Conv1D(64, 3, padding='same',
+              activation='relu', input_shape=input_shape))
     model.add(MaxPooling1D(pool_size=2))
     model.add(Dropout(0.25))
     model.add(Conv1D(128, 3, padding='same', activation='relu'))
@@ -204,7 +234,8 @@ def train_nn(h5_folder):
     model.add(Dropout(0.5))
     model.add(Dense(num_genres, activation='softmax'))
 
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='adam', metrics=['accuracy'])
 
     # Reshape the x data from array to Conv1D so that we can feed data into model
     X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
@@ -215,7 +246,8 @@ def train_nn(h5_folder):
     epochs = 20
 
     # Define early stopping callback
-    early_stopping = EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True)
+    early_stopping = EarlyStopping(
+        monitor='val_loss', patience=8, restore_best_weights=True)
 
     model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs,
               validation_data=(X_test, y_test), verbose=1, callbacks=[early_stopping])

@@ -7,7 +7,7 @@ import numpy as np
 def analyze_msd_structure(msd_file):
     """
     Analyze the structure of a Million Song Dataset (MSD) file.
-    
+
     :param msd_file: Path to the MSD file
     :return: Dictionary containing the structure of the file
     """
@@ -24,7 +24,7 @@ def analyze_msd_structure(msd_file):
 def convert_gtzan_to_msd_structure(gtzan_file, output_file):
     """
     Convert a GTZAN audio file to MSD structure and save as H5 file.
-    
+
     :param gtzan_file: Path to the input GTZAN audio file
     :param output_file: Path to save the output H5 file
     """
