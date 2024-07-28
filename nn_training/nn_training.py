@@ -14,41 +14,7 @@ from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D
 from keras.callbacks import EarlyStopping
 import pandas as pd
 import joblib
-
-
-def load_data(data_path):
-    """
-    The load_data function will correctly load the training database such that the audio file
-    is correctly related to it's associated data in an excel sheet.
-    :param data_path: Excel sheet that contains the necessary data of each audio file
-    :return: 2 arrays, one containing the features of the songs and one containing the labels
-    """
-    # load the csv file
-    data = pd.read_csv(data_path)
-
-    # Convert the chroma_mean list to be usable
-    data['chroma_mean'] = data['chroma_mean'].apply(eval)
-    chroma_mean_expanded = pd.DataFrame(data['chroma_mean'].tolist(), index=data.index)
-    chroma_mean_expanded.columns = [f'chroma_mean_{i + 1}' for i in range(chroma_mean_expanded.shape[1])]
-    data = pd.concat([data, chroma_mean_expanded], axis=1)
-    data.drop(columns=['chroma_mean'], inplace=True)
-
-    labels = data['genre']
-    features = data.drop(columns=['filename', 'genre'])
-
-    # Encode the labels
-    label_encoder = LabelEncoder()
-    labels_encoded = label_encoder.fit_transform(labels)
-    labels_onehot = to_categorical(labels_encoded)
-
-    # Scale the features
-    scaler = StandardScaler()
-    features_scaled = scaler.fit_transform(features)
-
-    # Save the label encoder
-    joblib.dump(label_encoder, 'label_encoder.pkl')
-
-    return features_scaled, labels_onehot
+from optimized_datasets import load_data
 
 
 def train_nn(data_path):
@@ -60,7 +26,7 @@ def train_nn(data_path):
     :return: None, but creates a .keras files that holds the nn
     """
     # Get the features and labels for the NN training
-    features, labels = load_data(data_path)
+    features, labels = load_data.load_data(data_path)
 
     # Get the number of genres
     num_genres = labels.shape[1]
