@@ -357,7 +357,7 @@ if __name__ == "__main__":
         np.save('y_test.npy', y_test)
 
         print("Processing complete. H5 files/summary saved: './processed_h5'.")
-        print(f"Number of genres in the final dataset: {
-          balanced_summary['genre'].nunique()}")
+        print(f"Number of genres in the final dataset: {balanced_summary[
+            'genre'].nunique()}")
         print(f"Genre distribution:\n{balanced_summary[
           'genre'].value_counts()}")
