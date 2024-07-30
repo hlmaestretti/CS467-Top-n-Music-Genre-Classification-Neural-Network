@@ -358,6 +358,6 @@ if __name__ == "__main__":
 
         print("Processing complete. H5 files/summary saved: './processed_h5'.")
         print(f"Number of genres in the final dataset: {balanced_summary[
-            'genre'].nunique()}")
+          'genre'].nunique()}")
         print(f"Genre distribution:\n{balanced_summary[
           'genre'].value_counts()}")
