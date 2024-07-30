@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils import class_weight
 from keras.models import Sequential
 from keras.optimizers import Adam
-from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D, BatchNormalization, GlobalAveragePooling1D
+from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D, BatchNormalization
 from keras.regularizers import l2
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from optimized_datasets import load_data
