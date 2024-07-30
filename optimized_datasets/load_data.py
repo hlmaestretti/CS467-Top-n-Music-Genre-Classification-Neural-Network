@@ -14,6 +14,7 @@ from librosa.feature import (
 )
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from keras.utils import to_categorical
+import joblib
 
 
 def load_data(h5_folder):
@@ -194,5 +195,8 @@ def load_data(h5_folder):
 
     scaler = StandardScaler()
     features_scaled = scaler.fit_transform(features)
+
+    # save the labels for future use
+    joblib.dump(label_encoder, 'label_encoder.pkl')
 
     return features_scaled, labels_onehot
