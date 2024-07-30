@@ -361,4 +361,3 @@ if __name__ == "__main__":
               f"{balanced_summary['genre'].nunique()}")
         print(f"Genre distribution:\n"
               f"{balanced_summary['genre'].value_counts()}")
-
