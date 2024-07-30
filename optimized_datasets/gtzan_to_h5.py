@@ -95,7 +95,7 @@ def main():
     gtzan_dir = ('C:/Users/wwwhu/PycharmProjects/CS467-Top-n-Music-Genre-Classification-Neural-Network/'
                  'Github-ignore/unified dataset/gtzan-input')
     output_dir = ('C:/Users/wwwhu/PycharmProjects/CS467-Top-n-Music-Genre-Classification-Neural-Network/'
-                 'Github-ignore/unified dataset/gtzan-output')
+                  'Github-ignore/unified dataset/gtzan-output')
     os.makedirs(output_dir, exist_ok=True)
 
     for genre in os.listdir(gtzan_dir):
