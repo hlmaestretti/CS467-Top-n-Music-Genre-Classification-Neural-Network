@@ -2,6 +2,7 @@ from pydub import AudioSegment
 import os
 import tkinter as tk
 from tkinter import filedialog
+from optimized_datasets import process_and_copy
 
 
 def convert_audio(input_file, output_format):
@@ -28,6 +29,8 @@ def convert_audio(input_file, output_format):
     except Exception as e:
         raise ValueError(
             f"Could not export audio file to {output_format}: {e}")
+    features = process_and_copy.extract_features(output_file)
+    print(f"Extracted features: {features}")
 
 
 if __name__ == "__main__":
