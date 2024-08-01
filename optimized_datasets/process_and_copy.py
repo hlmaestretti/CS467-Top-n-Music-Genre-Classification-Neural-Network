@@ -6,7 +6,7 @@ from tqdm import tqdm
 import shutil
 from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import train_test_split
-from feature_extraction import extract_features
+from optimized_datasets.feature_extraction import extract_features
 
 
 def find_h5_files(directory):
