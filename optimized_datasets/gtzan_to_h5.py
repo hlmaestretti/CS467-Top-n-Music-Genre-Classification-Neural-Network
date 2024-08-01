@@ -34,7 +34,8 @@ def convert_gtzan_to_msd_structure(gtzan_file, output_file):
     with h5py.File(output_file, 'w') as f:
         # Extract audio features
         duration = librosa.get_duration(y=audio, sr=sr)
-        spectral_centroids = librosa.feature.spectral_centroid(y=audio, sr=sr)[0]
+        spectral_centroids = librosa.feature.spectral_centroid(y=audio, sr=sr)[
+            0]
         spectral_rolloff = librosa.feature.spectral_rolloff(y=audio, sr=sr)[0]
         tempo, _ = librosa.beat.beat_track(y=audio, sr=sr)
         mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=20)
@@ -50,8 +51,10 @@ def convert_gtzan_to_msd_structure(gtzan_file, output_file):
                                   5.19, 2.39, 3.66, 2.29, 2.88])
         minor_profile = np.array([6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54,
                                   4.75, 3.98, 2.69, 3.34, 3.17])
-        major_correlation = np.correlate(chroma_sum, np.roll(major_profile, key))
-        minor_correlation = np.correlate(chroma_sum, np.roll(minor_profile, key))
+        major_correlation = np.correlate(
+            chroma_sum, np.roll(major_profile, key))
+        minor_correlation = np.correlate(
+            chroma_sum, np.roll(minor_profile, key))
         mode = 0 if major_correlation > minor_correlation else 1
 
         # Determine time signature
