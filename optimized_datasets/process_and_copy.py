@@ -243,7 +243,7 @@ if __name__ == "__main__":
 
     # Filter genres with at least 70 tracks
     genre_counts = unified_df['genre'].value_counts()
-    genres_to_keep = genre_counts[genre_counts >= 70].index
+    genres_to_keep = genre_counts[genre_counts >= 101].index
     unified_df = unified_df[unified_df['genre'].isin(genres_to_keep)]
 
     # Filter genres with at least 70 tracks
@@ -256,7 +256,7 @@ if __name__ == "__main__":
         all_files, './processed_h5', unified_df)
 
     # Filter genres with at least 70 tracks
-    balanced_summary = balance_dataset(combined_summary)
+    balanced_summary = balance_dataset(combined_summary, 300)
 
     # Preprocess numeric columns
     numeric_columns = balanced_summary.select_dtypes(

@@ -7,4 +7,5 @@ from nn_training import nn_training
 
 if __name__ == "__main__":
     h5_folder = "./processed_h5"
-    nn_training.train_nn(h5_folder)
+    dataset = './processed_dataset_summary.csv'
+    nn_training.train_nn(h5_folder, dataset)

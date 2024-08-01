@@ -10,23 +10,25 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.utils import class_weight
 from keras.models import Sequential
-from keras.optimizers import Adam
+from keras.optimizers import Adagrad
 from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D, BatchNormalization
 from keras.regularizers import l2
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from optimized_datasets import load_data
+from sklearn.model_selection import cross_val_score
 
 
-def train_nn(h5_folder):
+def train_nn(h5_folder, dataset_file):
     """
     The train_nn function takes a csv file containing the features and labels of a song
     and feeds it to a new neural network. The neural network is designed to be a 1D
     Convolution Neural Network.
     :param h5_folder: The h5 folder containing each song in the dataset.
+    :param dataset_file: csv file containing info of the desired dataset
     :return: None, but creates a .keras files that holds the nn
     """
     # Get the features and labels for the NN training
-    features, labels = load_data.load_data(h5_folder)
+    features, labels = load_data.load_data(h5_folder, dataset_file)
 
     # Get the number of genres
     num_genres = labels.shape[1]
@@ -61,23 +63,14 @@ def train_nn(h5_folder):
     model.add(MaxPooling1D(pool_size=2))
     model.add(Dropout(0.3))
 
-    # layer 4
-    model.add(Conv1D(512, 3, padding='same', activation='relu'))
-    model.add(BatchNormalization())
-    model.add(MaxPooling1D(pool_size=2))
-    model.add(Dropout(0.3))
-
-    # Global Average Pooling to handle varying feature map sizes
-    # model.add(GlobalAveragePooling1D())
-
     # Flatten and Dense Layers
     model.add(Flatten())
-    model.add(Dense(512, activation='relu', kernel_regularizer=l2(0.01)))
+    model.add(Dense(256, activation='relu', kernel_regularizer=l2(0.01)))
     model.add(Dropout(0.5))
     model.add(Dense(num_genres, activation='softmax'))
 
-    learning_rate = 0.001
-    optimizer = Adam(learning_rate=learning_rate)
+    learning_rate = 0.02
+    optimizer = Adagrad(learning_rate=learning_rate)
 
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
@@ -86,11 +79,11 @@ def train_nn(h5_folder):
     x_test = x_test.reshape(x_test.shape[0], x_test.shape[1], 1)
 
     # Setting batch size and epoch
-    batch_size = 32
-    epochs = 200
+    batch_size = 64
+    epochs = 500
 
     # Define callbacks
-    early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    early_stopping = EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True)
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=0.00001)
 
     # Compute class weights
@@ -100,8 +93,8 @@ def train_nn(h5_folder):
     class_weights = dict(enumerate(class_weights))
 
     model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs,
-              validation_data=(x_test, y_test), verbose=1, callbacks=[early_stopping, reduce_lr],
-              class_weight=class_weights)
+              validation_data=(x_test, y_test), verbose=1, callbacks=[early_stopping, reduce_lr])
+
     # Save the training
     model.save('trained_model.keras')
     # model.summary()
@@ -110,4 +103,7 @@ def train_nn(h5_folder):
 if __name__ == "__main__":
     data_path = ("C:/Users/wwwhu/PycharmProjects/CS467-Top-n-Music-Genre-Classification-Neural-Network/"
                  "optimized_datasets/processed_h5")
-    train_nn(data_path)
+    dataset = ("C:/Users/wwwhu/PycharmProjects/CS467-Top-n-Music-Genre-Classification-Neural-Network/"
+               "optimized_datasets/processed_dataset_summary.csv")
+    train_nn(data_path, dataset)
+
