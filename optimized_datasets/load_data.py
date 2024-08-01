@@ -12,7 +12,7 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from keras.utils import to_categorical
 import joblib
 from optimized_datasets.feature_extraction import extract_features
-import pandas from pd
+import pandas as pd
 
 
 def flatten_dict(d):
