@@ -5,6 +5,7 @@ This file contains the function that loads the features and labels from the upda
 
 import os
 import h5py
+import numpy as np
 from sklearn.feature_selection import SelectKBest, f_classif
 from imblearn.over_sampling import SMOTE
 from sklearn.preprocessing import LabelEncoder, StandardScaler
