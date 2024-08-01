@@ -15,7 +15,6 @@ from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D, BatchNor
 from keras.regularizers import l2
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from optimized_datasets import load_data
-from sklearn.model_selection import cross_val_score
 
 
 def train_nn(h5_folder, dataset_file):
@@ -106,4 +105,3 @@ if __name__ == "__main__":
     dataset = ("C:/Users/wwwhu/PycharmProjects/CS467-Top-n-Music-Genre-Classification-Neural-Network/"
                "optimized_datasets/processed_dataset_summary.csv")
     train_nn(data_path, dataset)
-
