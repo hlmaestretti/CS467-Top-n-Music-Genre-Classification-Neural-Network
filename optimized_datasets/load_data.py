@@ -18,6 +18,11 @@ import joblib
 from feature_extraction import extract_features
 
 
+def flatten_dict(d):
+    """Flatten a dictionary into a single list of values."""
+    return [v for v in d.values() if isinstance(v, (int, float))]
+
+
 def load_data(h5_folder):
     """
     Load and process data from H5 files in the specified folder using extract_features.
