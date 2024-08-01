@@ -20,7 +20,7 @@ def flatten_dict(d):
     return [v for v in d.values() if isinstance(v, (int, float))]
 
 
-def load_data(h5_folder):
+def load_data(h5_folder, dataset_file):
     """
     Load and process data from H5 files in the specified folder using extract_features.
     Includes data augmentation and feature selection.
