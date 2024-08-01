@@ -7,7 +7,6 @@ from keras.models import load_model
 from optimized_datasets import load_data, gtzan_to_h5
 import h5py
 import joblib
-import numpy as np
 
 
 def interpret_predictions(predictions, label_encoder):
