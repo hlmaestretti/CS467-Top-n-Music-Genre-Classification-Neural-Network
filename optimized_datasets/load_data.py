@@ -5,7 +5,6 @@ This file contains the function that loads the features and labels from the upda
 
 import os
 import h5py
-import numpy as np
 from sklearn.feature_selection import SelectKBest, f_classif
 from imblearn.over_sampling import SMOTE
 from sklearn.preprocessing import LabelEncoder, StandardScaler
@@ -103,6 +102,5 @@ def load_data(h5_folder, dataset_file):
 
     # save the labels for future use
     joblib.dump(label_encoder, 'label_encoder.pkl')
-
 
     return features_selected, labels_onehot
