@@ -6,16 +6,12 @@ This file contains the function that loads the features and labels from the upda
 import os
 import h5py
 import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import SelectKBest, f_classif
 from imblearn.over_sampling import SMOTE
 from sklearn.preprocessing import LabelEncoder, StandardScaler
-from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D
 from keras.utils import to_categorical
-from keras.models import Sequential
-from keras.callbacks import EarlyStopping
 import joblib
-from feature_extraction import extract_features
+from optimized_datasets.feature_extraction import extract_features
 
 
 def flatten_dict(d):

@@ -1,6 +1,5 @@
 import h5py
 import numpy as np
-from scipy.stats import skew, kurtosis
 from scipy.signal import find_peaks
 from scipy.stats import skew, kurtosis, entropy, gmean
 from librosa.feature import spectral_bandwidth, zero_crossing_rate, rms
