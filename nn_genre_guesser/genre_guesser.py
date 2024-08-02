@@ -7,6 +7,7 @@ from keras.models import load_model
 from optimized_datasets import load_data, gtzan_to_h5
 import h5py
 import joblib
+import numpy as np
 
 
 def interpret_predictions(predictions, label_encoder):
@@ -33,7 +34,7 @@ def genre_guesser(model, file):
     The genre_guesser guesses what genres are related to the given song data.
 
     :param model:
-    :param h5_song_file:
+    :param file:
     :return: A dictionary with the percentile relationship to each genre in the NN
     """
     # Load model
@@ -47,8 +48,17 @@ def genre_guesser(model, file):
 
     with h5py.File(h5_file_name, 'r') as f:
         try:
-            feature = load_data.extract_features(f)
-            feature = feature.reshape((1, 102, 1))
+            feature_dict = load_data.extract_features(f)
+            feature = np.array(list(feature_dict.values()))
+
+            # Adjust the shape of the feature array
+            if feature.size > 27:
+                feature = feature[:27]  # Trim to 27 features
+            elif feature.size < 27:
+                feature = np.pad(feature, (0, 27 - feature.size), mode='constant')  # Pad to 27 features
+
+            feature = feature.reshape((1, 27, 1))  # Reshape to match model input
+
         except Exception as e:
             print(f"Error processing file {h5_file_name}: {str(e)}")
 
@@ -61,7 +71,7 @@ def genre_guesser(model, file):
 if __name__ == '__main__':
     model = "../nn_training/trained_model.keras"
     input_file = ('C:/Users/wwwhu/PycharmProjects/CS467-Top-n-Music-Genre-Classification-Neural-Network'
-                  '/nn_genre_guesser/country.00000.au')
+                  '/nn_genre_guesser/pop.00000.au')
 
     results = genre_guesser(model, input_file)
 

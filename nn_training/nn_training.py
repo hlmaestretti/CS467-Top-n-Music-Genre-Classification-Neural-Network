@@ -36,7 +36,7 @@ def train_nn(h5_folder, dataset_file):
     x_train, x_test, y_train, y_test = train_test_split(features,
                                                         labels,
                                                         test_size=0.2,
-                                                        random_state=42,
+                                                        random_state=41,
                                                         stratify=np.argmax(labels, axis=1)
                                                         )
 
@@ -62,9 +62,15 @@ def train_nn(h5_folder, dataset_file):
     model.add(MaxPooling1D(pool_size=2))
     model.add(Dropout(0.3))
 
+    # layer 4
+    model.add(Conv1D(512, 3, padding='same', activation='relu'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling1D(pool_size=2))
+    model.add(Dropout(0.3))
+
     # Flatten and Dense Layers
     model.add(Flatten())
-    model.add(Dense(256, activation='relu', kernel_regularizer=l2(0.01)))
+    model.add(Dense(512, activation='relu', kernel_regularizer=l2(0.01)))
     model.add(Dropout(0.5))
     model.add(Dense(num_genres, activation='softmax'))
 
@@ -82,21 +88,24 @@ def train_nn(h5_folder, dataset_file):
     epochs = 500
 
     # Define callbacks
-    early_stopping = EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True)
+    early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=0.00001)
 
     # Compute class weights
-    class_weights = class_weight.compute_class_weight('balanced',
-                                                      classes=np.arange(num_genres),
-                                                      y=np.argmax(y_train, axis=1))
-    class_weights = dict(enumerate(class_weights))
+    # Count the number of samples per class
+    class_counts = np.bincount(np.argmax(y_train, axis=1))
+    total_samples = len(y_train)
+
+    # Compute inverse frequency weights
+    class_weights = {i: (total_samples / count) ** 1.5 for i, count in enumerate(class_counts)}
 
     model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs,
-              validation_data=(x_test, y_test), verbose=1, callbacks=[early_stopping, reduce_lr])
+              validation_data=(x_test, y_test), verbose=1, callbacks=[early_stopping, reduce_lr],
+              class_weight=class_weights)
 
     # Save the training
     model.save('trained_model.keras')
-    # model.summary()
+    model.summary()
 
 
 if __name__ == "__main__":

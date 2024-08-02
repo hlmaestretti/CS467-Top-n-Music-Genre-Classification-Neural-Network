@@ -1,3 +1,7 @@
+"""
+Test file to see h5 formatting
+"""
+
 import h5py
 import librosa
 import numpy as np
@@ -66,10 +70,9 @@ def extract_mfcc_features_from_simple_h5(h5_file_path):
 
 
 # Example usage
-h5_file_path = '../optimized_datasets/processed_h5/blues.00000.h5'
+# h5_file_path = '../optimized_datasets/processed_h5/blues.00000.h5'
+h5_file_path = "../nn_genre_guesser/blues.00000.h5"
+
 
 print_h5_structure(h5_file_path)
 # print(extract_mfcc_features_from_simple_h5(h5_file_path))
-
-arr1, arr2 = extract_features_labels_complex_h5(h5_file_path)
-print(arr1, arr2)

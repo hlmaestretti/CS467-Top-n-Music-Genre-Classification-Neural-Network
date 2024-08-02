@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
     # Filter genres with at least 70 tracks
     genre_counts = unified_df['genre'].value_counts()
-    genres_to_keep = genre_counts[genre_counts >= 101].index
+    genres_to_keep = genre_counts[genre_counts >= 70].index
     unified_df = unified_df[unified_df['genre'].isin(genres_to_keep)]
 
     # Find all H5 files in the specified directories
