@@ -15,9 +15,13 @@ import joblib
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+
 class NullWriter:
     def write(self, s):
         pass
+
+
 sys.stderr = NullWriter()
 logging.getLogger('tensorflow').disabled = True
 
