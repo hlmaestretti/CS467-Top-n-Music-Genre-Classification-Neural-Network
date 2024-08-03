@@ -3,6 +3,7 @@ This file contains the primary functions for the Top-n Music Genre Classificatio
 It includes functionality for genre classification, user interaction, and result display.
 """
 
+from nn_genre_guesser.genre_guesser import genre_guesser, interpret_predictions
 import os
 import sys
 import logging
@@ -14,19 +15,11 @@ import joblib
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-
-# Redirect stderr to devnull
 class NullWriter:
     def write(self, s):
         pass
-
 sys.stderr = NullWriter()
-
-# Disable TensorFlow logging
 logging.getLogger('tensorflow').disabled = True
-
-from nn_genre_guesser.genre_guesser import genre_guesser, interpret_predictions
-
 
 
 def classify_genre(model_path: str, file_path: str):
@@ -53,6 +46,7 @@ def classify_genre(model_path: str, file_path: str):
     processing_thread.join()
     return result
 
+
 def animate_processing(stop_event):
     """
     Displays an animated processing indicator while classification is ongoing.
@@ -69,6 +63,7 @@ def animate_processing(stop_event):
     sys.stdout.write("\r" + " " * 20 + "\r")  # Clear the processing message
     sys.stdout.flush()
 
+
 def get_file_path() -> str:
     """
     Prompts the user to input a valid file path for audio classification.
@@ -82,6 +77,7 @@ def get_file_path() -> str:
             return file_path
         else:
             print("Error: File not found. Please enter a valid file path.")
+
 
 def get_user_choice() -> bool:
     """
@@ -99,6 +95,7 @@ def get_user_choice() -> bool:
         else:
             print("Invalid input. Please enter 'Y' or 'N'.")
 
+
 def filter_predictions(genre_dict, threshold=0.0001):
     """
     Filters out genre predictions below a certain confidence threshold.
@@ -108,6 +105,7 @@ def filter_predictions(genre_dict, threshold=0.0001):
     :return: Filtered dictionary of genre predictions.
     """
     return {genre: confidence for genre, confidence in genre_dict.items() if confidence > threshold}
+
 
 def display_results(prediction, label_encoder):
     """
@@ -123,6 +121,7 @@ def display_results(prediction, label_encoder):
                            key=lambda x: x[1], reverse=True)
     for genre, confidence in sorted_genres:
         print(f"{genre}: {confidence:.2%}")
+
 
 def main():
     """
@@ -150,6 +149,7 @@ def main():
             break
 
     print("\nThank you for using the Top-n Music Genre Classification Neural Network. Goodbye!")
+
 
 if __name__ == "__main__":
     main()
