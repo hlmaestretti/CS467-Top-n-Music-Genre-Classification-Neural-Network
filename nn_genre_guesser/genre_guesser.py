@@ -15,7 +15,6 @@ def interpret_predictions(predictions, label_encoder):
     Interpret model predictions to map them to genre labels.
 
     :param predictions: Array of model predictions (probability distributions).
-    :param label_encoder: LabelEncoder used to decode genre labels.
     :return: Dictionary with genre labels and their corresponding probabilities.
     """
     genre_probabilities = predictions[0]
@@ -33,8 +32,8 @@ def genre_guesser(model, file):
     """
     The genre_guesser guesses what genres are related to the given song data.
 
-    :param model:
-    :param file:
+    :param model: The trained nn model saved as a .keras file
+    :param file: Any common audio file (mp3, mp4, au, etc)
     :return: A dictionary with the percentile relationship to each genre in the NN
     """
     # Load model
@@ -52,30 +51,30 @@ def genre_guesser(model, file):
             feature = np.array(list(feature_dict.values()))
 
             # Adjust the shape of the feature array
-            if feature.size > 27:
-                feature = feature[:27]  # Trim to 27 features
-            elif feature.size < 27:
-                feature = np.pad(feature, (0, 27 - feature.size), mode='constant')  # Pad to 27 features
+            if feature.size > 68:
+                feature = feature[:68]  # Trim to 27 features
+            elif feature.size < 68:
+                feature = np.pad(feature, (0, 68 - feature.size), mode='constant')  # Pad to 27 features
 
-            feature = feature.reshape((1, 27, 1))  # Reshape to match model input
+            feature = feature.reshape((1, 68, 1))  # Reshape to match model input
 
         except Exception as e:
             print(f"Error processing file {h5_file_name}: {str(e)}")
 
     prediction = model.predict(feature)
     # read the vector, for now just assume it out
-    print(prediction)
     return prediction
 
 
 if __name__ == '__main__':
-    model = "../nn_training/trained_model.keras"
-    input_file = ('C:/Users/wwwhu/PycharmProjects/CS467-Top-n-Music-Genre-Classification-Neural-Network'
-                  '/nn_genre_guesser/pop.00000.au')
+    model = "./nn_training/trained_model.keras"
+    input_file = 'jazz.00000.au'
 
     results = genre_guesser(model, input_file)
 
+    labels = ("C:/Users/wwwhu/Desktop/CS467-Top-n-Music-Genre-Classification-Neural-Network/nn_training/"
+              "label_encoder.pkl")
     # Load the LabelEncoder
-    label_encoder = joblib.load('../nn_training/label_encoder.pkl')
+    label_encoder = joblib.load(labels)
 
     print(interpret_predictions(results, label_encoder))
