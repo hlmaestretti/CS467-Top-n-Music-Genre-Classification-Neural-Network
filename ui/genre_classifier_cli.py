@@ -5,19 +5,27 @@ It includes functionality for genre classification, user interaction, and result
 
 import os
 import sys
+import warnings
 import logging
 import threading
 import time
 import joblib
 
-# Suppress TensorFlow logging
+# Suppress TensorFlow logging and warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
-import tensorflow as tf
+warnings.filterwarnings('ignore', category=FutureWarning)
+warnings.filterwarnings('ignore', category=UserWarning)
+
+import tensorflow as tf  # noqa: E402
 tf.get_logger().setLevel('ERROR')
 tf.autograph.set_verbosity(0)
+
+logging.getLogger('tensorflow').disabled = True
+
+from nn_genre_guesser.genre_guesser import genre_guesser, interpret_predictions  # noqa: E402
 
 
 class NullWriter:
@@ -26,9 +34,6 @@ class NullWriter:
 
 
 sys.stderr = NullWriter()
-logging.getLogger('tensorflow').disabled = True
-
-from nn_genre_guesser.genre_guesser import genre_guesser, interpret_predictions  
 
 
 def classify_genre(model_path: str, file_path: str):
