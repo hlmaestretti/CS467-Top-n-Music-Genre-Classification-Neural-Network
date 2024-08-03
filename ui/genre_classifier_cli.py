@@ -3,7 +3,6 @@ This file contains the primary functions for the Top-n Music Genre Classificatio
 It includes functionality for genre classification, user interaction, and result display.
 """
 
-from nn_genre_guesser.genre_guesser import genre_guesser, interpret_predictions
 import os
 import sys
 import logging
@@ -16,6 +15,10 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
+import tensorflow as tf
+tf.get_logger().setLevel('ERROR')
+tf.autograph.set_verbosity(0)
+
 
 class NullWriter:
     def write(self, s):
@@ -24,6 +27,8 @@ class NullWriter:
 
 sys.stderr = NullWriter()
 logging.getLogger('tensorflow').disabled = True
+
+from nn_genre_guesser.genre_guesser import genre_guesser, interpret_predictions  
 
 
 def classify_genre(model_path: str, file_path: str):
