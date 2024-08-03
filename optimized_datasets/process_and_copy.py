@@ -1,3 +1,9 @@
+"""
+The process_and_copy file contains everything needed to combine the gtzan and msd h5 files into one
+dataset. It also optimizes the dataset by making the dataset more balanced using data augmentation
+and setting limits on the size of a genre set
+"""
+
 import os
 import h5py
 import pandas as pd
@@ -72,9 +78,9 @@ if __name__ == "__main__":
     unified_df['filename'] = unified_df['filename'].apply(clean_filename)
     unified_df['genre'] = unified_df['genre'].str.lower()
 
-    # Filter genres with at least 70 tracks
+    # Filter genres with at least 100 tracks
     genre_counts = unified_df['genre'].value_counts()
-    genres_to_keep = genre_counts[genre_counts >= 70].index
+    genres_to_keep = genre_counts[genre_counts >= 101].index
     unified_df = unified_df[unified_df['genre'].isin(genres_to_keep)]
 
     # Find all H5 files in the specified directories
@@ -123,6 +129,7 @@ if __name__ == "__main__":
     print(f"Number of features: {X.shape[1]}")
 
     y = balanced_summary['genre']
+    print(y)
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y)
 

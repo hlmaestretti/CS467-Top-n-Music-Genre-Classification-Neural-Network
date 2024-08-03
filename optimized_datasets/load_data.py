@@ -6,32 +6,41 @@ This file contains the function that loads the features and labels from the upda
 import os
 import h5py
 import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import SelectKBest, f_classif
 from imblearn.over_sampling import SMOTE
 from sklearn.preprocessing import LabelEncoder, StandardScaler
-from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D
 from keras.utils import to_categorical
-from keras.models import Sequential
-from keras.callbacks import EarlyStopping
 import joblib
-from feature_extraction import extract_features
+from optimized_datasets.feature_extraction import extract_features
+import pandas as pd
 
 
-def load_data(h5_folder):
+def flatten_dict(d):
+    """Flatten a dictionary into a single list of values."""
+    return [v for v in d.values() if isinstance(v, (int, float))]
+
+
+def load_data(h5_folder, dataset_file):
     """
     Load and process data from H5 files in the specified folder using extract_features.
     Includes data augmentation and feature selection.
 
     :param h5_folder: Path to the folder containing H5 files
+    :param dataset_file: csv file containing the contents of the dataset
     :return: Tuple of scaled features and one-hot encoded labels
     """
+    # Read the CSV file to get the list of file names
+    df = pd.read_csv(dataset_file)
+    file_list = df['filename'].tolist()
+
     features = []
     labels = []
     feature_length = None
 
     for filename in os.listdir(h5_folder):
         if filename.endswith('.h5'):
+            if filename not in file_list:
+                continue
             file_path = os.path.join(h5_folder, filename)
             with h5py.File(file_path, 'r') as f:
                 try:
@@ -93,6 +102,6 @@ def load_data(h5_folder):
     labels_onehot = to_categorical(labels_resampled)
 
     # save the labels for future use
-    joblib.dump(label_encoder, 'label_encoder.pkl')
+    joblib.dump(label_encoder, './nn_training/label_encoder.pkl')
 
     return features_selected, labels_onehot

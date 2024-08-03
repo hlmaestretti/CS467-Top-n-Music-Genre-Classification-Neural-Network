@@ -6,8 +6,13 @@
 
 ## Explanation of the Functions
 ### Neural Network Training
-TBD
+General idea of the functions and goals
+#### nn_training.py
+#### .keras and .pkl files
 
-### The Prediction Program
-TBD
+### Prediction Program
+General idea of functions and goals
+#### genre_guesser.py
+#### h5_verify.py
+
 
