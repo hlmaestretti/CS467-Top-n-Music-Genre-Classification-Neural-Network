@@ -102,6 +102,6 @@ def load_data(h5_folder, dataset_file):
     labels_onehot = to_categorical(labels_resampled)
 
     # save the labels for future use
-    joblib.dump(label_encoder, 'label_encoder.pkl')
+    joblib.dump(label_encoder, './nn_training/label_encoder.pkl')
 
     return features_selected, labels_onehot
