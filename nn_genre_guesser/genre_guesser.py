@@ -52,9 +52,9 @@ def genre_guesser(model, file):
 
             # Adjust the shape of the feature array
             if feature.size > 68:
-                feature = feature[:68]  # Trim to 27 features
+                feature = feature[:68]  # Trim to 68 features
             elif feature.size < 68:
-                feature = np.pad(feature, (0, 68 - feature.size), mode='constant')  # Pad to 27 features
+                feature = np.pad(feature, (0, 68 - feature.size), mode='constant')  # Pad to 68 features
 
             feature = feature.reshape((1, 68, 1))  # Reshape to match model input
 
