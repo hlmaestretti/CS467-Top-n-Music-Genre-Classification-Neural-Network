@@ -68,7 +68,7 @@ def genre_guesser(model, file):
 
 if __name__ == '__main__':
     model = "./nn_training/trained_model.keras"
-    input_file = 'jazz.00000.au'
+    input_file = 'metal.00000.au'
 
     results = genre_guesser(model, input_file)
 
