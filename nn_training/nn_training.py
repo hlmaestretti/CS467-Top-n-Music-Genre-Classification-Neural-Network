@@ -85,17 +85,17 @@ def train_nn():
     x_test = x_test.reshape(x_test.shape[0], x_test.shape[1], 1)
 
     # Setting batch size and epoch
-    batch_size = 32
-    epochs = 200
+    batch_size = 256
+    epochs = 400
 
     # Define callbacks
     early_stopping = EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True)
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.25, patience=5, min_lr=0.000005)
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=0.000005)
     model_checkpoint = ModelCheckpoint('./nn_training/best_model.keras', monitor='val_loss',
                                        save_best_only=True, save_weights_only=False, mode='min', verbose=1)
 
     # Compute class weights
-    scaling_factor = .7
+    scaling_factor = 1
     class_weights = class_weight.compute_class_weight('balanced',
                                                       classes=np.unique(np.argmax(y_train, axis=1)),
                                                       y=np.argmax(y_train, axis=1))
