@@ -16,18 +16,32 @@ from feature_extraction import extract_features
 
 
 def find_h5_files(directory):
-    """Find all H5 files in the directory and its subdirectories."""
+    """Find all H5 files in the directory and its subdirectories.
+    
+    :param directory: Directory to search for H5 files
+    :return: List of paths to H5 files
+    """
     return [os.path.join(root, file) for root, _, files in os.walk(directory)
             for file in files if file.endswith('.h5')]
 
 
 def clean_filename(filename):
-    """Clean the filename by removing path and whitespace."""
+    """Clean the filename by removing path and whitespace.
+    
+    :param filename: Filename to clean
+    :return: Cleaned filename
+    """
     return os.path.basename(filename).strip()
 
 
 def process_and_copy_h5(input_files, output_dir, unified_df=None):
-    """Process H5 files, extract features, and copy to output directory."""
+    """Process H5 files, extract features, and copy to output directory.
+    
+    :param input_files: List of input H5 files
+    :param output_dir: Directory to copy processed files
+    :param unified_df: DataFrame containing unified dataset information
+    :return: DataFrame with processed data
+    """
     os.makedirs(output_dir, exist_ok=True)
     data = []
 
@@ -66,7 +80,12 @@ def process_and_copy_h5(input_files, output_dir, unified_df=None):
 
 def balance_dataset(df, n_samples=300):
     """This function maintains up to 300 samples per genre, including all samples
-    for genres with fewer than 300 tracks."""
+    for genres with fewer than 300 tracks.
+    
+    :param df: Input DataFrame
+    :param n_samples: Maximum number of samples per genre
+    :return: Balanced DataFrame
+    """
     return df.groupby('genre').apply(lambda x: x.sample(n=min(len(x), n_samples), random_state=42)).reset_index(drop=True)
 
 

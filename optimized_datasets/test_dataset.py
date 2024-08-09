@@ -1,5 +1,5 @@
 """
-THis file was made to test the optimized dataset's performance
+This file was made to test the optimized dataset's performance
 """
 
 from nn_training import nn_training

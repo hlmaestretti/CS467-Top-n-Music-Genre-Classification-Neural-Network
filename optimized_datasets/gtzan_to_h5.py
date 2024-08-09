@@ -1,3 +1,8 @@
+"""
+This module provides functionality to analyze the structure of Million Song Dataset (MSD) files
+and convert GTZAN audio files to the MSD structure, saving them as H5 files.
+"""
+
 import h5py
 import os
 import librosa

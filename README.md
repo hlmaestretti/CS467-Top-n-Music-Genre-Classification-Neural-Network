@@ -46,4 +46,25 @@ it easier to parse.
 #### h5_verify.py
 The h5_verify.py file contains a function that can print out the structure of an h5 file.
 
+### Dataset Creation and Optimization
+The optimized_datasets folder contains the main files used when creating and optimizing our dataset.
 
+The unify-tagtraum-top-magd.py file combines genre information from the Top-MAGD and Tagtraum datasets to create a unified genre-annotated dataset. The process_and_copy.py file combines the GTZAN and MSD H5 files into one dataset and optimizes it by balancing genre representation. The load_data.py file contains the function that loads the features and labels from the updated dataset.
+
+#### unify-tagtraum-top-magd.py
+The unify-tagtraum-top-magd.py file contains the functions to create a unified dataset from the Top-MAGD and Tagtraum datasets. It processes the Million Song Dataset (MSD) subset and matches track IDs with genre labels from both sources. The main function in this file reads the genre files, processes the MSD subset, and creates a CSV file with the unified dataset.
+
+#### process_and_copy.py
+The process_and_copy.py file contains everything needed to combine the GTZAN and MSD H5 files into one dataset. It also optimizes the dataset by making it more balanced using data augmentation and setting limits on the size of a genre set. The main function in this file processes H5 files, extracts features, and creates a balanced dataset for training.
+
+#### load_data.py
+The load_data.py file contains the function that loads the features and labels from the updated dataset. It includes data augmentation and feature selection processes. The load_data function in this file prepares the data for input into our neural network training pipeline.
+
+#### gtzan_to_h5.py
+The gtzan_to_h5.py file contains functions to convert GTZAN audio files to the MSD H5 file structure. It analyzes the MSD structure and creates H5 files from GTZAN audio files that match this structure. This file ensures compatibility between the GTZAN dataset and our MSD-based processing pipeline.
+
+### User Interface
+The ui folder contains the files used to create the user interface for our music genre classification system.
+
+#### genre_classifier_cli.py
+The genre_classifier_cli.py file contains the functions to create a command-line interface for our genre classification system. It allows users to input audio files and receive genre predictions. The main function in this file handles user input, processes audio files, and displays genre predictions using the trained neural network model.

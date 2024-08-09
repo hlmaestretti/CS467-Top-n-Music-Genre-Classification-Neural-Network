@@ -16,7 +16,11 @@ import pandas as pd
 
 
 def flatten_dict(d):
-    """Flatten a dictionary into a single list of values."""
+    """Flatten a dictionary into a single list of values.
+    
+    :param d: Dictionary to be flattened
+    :return: List of flattened dictionary values
+    """
     return [v for v in d.values() if isinstance(v, (int, float))]
 
 
