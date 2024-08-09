@@ -1,5 +1,8 @@
-""" 
-This file was used to create a genre-annotated dataset by combining information from the Top-MAGD and Tagtraum datasets. It reads genre information from both datasets, processes the Million Song Dataset (MSD) subset, and creates a unified dataset with genre annotations from both sources. This unified dataset serves as the basis for further processing and analysis in the music genre classification project. 
+"""
+This file was used to create a genre-annotated dataset by combining information from the Top-MAGD and Tagtraum datasets.
+It reads genre information from both datasets, processes the Million Song Dataset (MSD) subset, and creates a unified
+dataset with genre annotations from both sources. This unified dataset serves as the basis for further processing and
+analysis in the music genre classification project.
 """
 
 import os
