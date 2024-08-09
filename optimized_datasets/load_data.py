@@ -2,7 +2,6 @@
 This file contains the function that loads the features and labels from the updated dataset
 """
 
-
 import os
 import h5py
 import numpy as np
@@ -17,7 +16,7 @@ import pandas as pd
 
 def flatten_dict(d):
     """Flatten a dictionary into a single list of values.
-    
+
     :param d: Dictionary to be flattened
     :return: List of flattened dictionary values
     """

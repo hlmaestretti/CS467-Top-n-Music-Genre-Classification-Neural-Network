@@ -9,7 +9,7 @@ import pandas as pd
 def read_genre_file(file_path):
     """
     This function reads a genre file and creates a dictionary mapping track IDs to genres.
-    
+
     :param file_path: Path to the genre file
     :return: Dictionary of track IDs and their corresponding genres
     """
@@ -26,7 +26,7 @@ def read_genre_file(file_path):
 def process_msd_subset(msd_path, tagtraum_genres, topmagd_genres):
     """
     This function processes the MSD subset and creates a DataFrame with genre annotations.
-    
+
     :param msd_path: Path to the MSD subset
     :param tagtraum_genres: Dictionary of Tagtraum genre annotations
     :param topmagd_genres: Dictionary of Top-MAGD genre annotations
@@ -71,7 +71,8 @@ def main():
     print(f"Total entries in tagtraum: {len(tagtraum_genres)}")
     print(f"Total entries in top-magd: {len(topmagd_genres)}")
 
-    unified_df = process_msd_subset(msd_subset_path, tagtraum_genres, topmagd_genres)
+    unified_df = process_msd_subset(
+        msd_subset_path, tagtraum_genres, topmagd_genres)
 
     unified_df.to_csv('unified_music_dataset.csv', index=False)
 
@@ -85,7 +86,8 @@ def main():
     print(unified_df['topmagd_genre'].value_counts())
 
     unified_df['genres_match'] = unified_df['tagtraum_genre'] == unified_df['topmagd_genre']
-    match_percentage = (unified_df['genres_match'].sum() / len(unified_df)) * 100
+    match_percentage = (
+        unified_df['genres_match'].sum() / len(unified_df)) * 100
 
     print(f"\nPercentage of matching genres: {match_percentage:.2f}%")
 
