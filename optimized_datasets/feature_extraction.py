@@ -1,3 +1,9 @@
+"""
+This module contains functions for extracting audio features from H5 files.
+It provides utilities for safely retrieving data from H5 files and extracting
+various audio features such as timbre, loudness, and pitch-related characteristics.
+"""
+
 import h5py
 import numpy as np
 from scipy.signal import find_peaks
@@ -6,7 +12,12 @@ from librosa.feature import spectral_bandwidth, zero_crossing_rate, rms
 
 
 def safe_get(f, key, default_value):
-    """Safely retrieve a value from an H5 file, returning a default if not found."""
+    """
+    :param f: The H5 file object.
+    :param key: The key to retrieve from the H5 file.
+    :param default_value: The value to return if the key is not found.
+    :return: The value associated with the key, or the default value if not found.
+    """
     try:
         value = f[key]
         if isinstance(value, h5py.Dataset):
@@ -21,7 +32,13 @@ def safe_get(f, key, default_value):
 
 
 def extract_features(f):
-    """Extract various audio features from an H5 file."""
+    """
+    This function extracts a wide range of audio features including duration,
+    tempo, key, mode, timbre characteristics, loudness features, and pitch-related features.
+
+    :param f: The H5 file object containing audio data.
+    :return: A dictionary containing extracted audio features.
+    """
     features = {}
 
     # Extract song-level features
