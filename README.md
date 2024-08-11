@@ -9,6 +9,18 @@ To install the python packages, use the following command once you have copied t
 pip install -r requirements.txt
 ```
 
+#### Installation Guide for FFmpeg
+To run the audio conversion successfully, you need to have FFmpeg installed on your system. Below are the instructions for installing FFmpeg.
+
+1. Download the latest FFmpeg release from the official website: [FFmpeg Downloads](https://ffmpeg.org/download.html)
+2. Extract the downloaded ZIP file to a folder on your computer.
+3. Add FFmpeg to your system PATH:
+   - Open the Start Menu, search for "Environment Variables" and open it.
+   - Under the "System variables" section, find the `Path` variable and select "Edit".
+   - Click "New" and add the path to the `bin` folder inside the extracted FFmpeg directory (e.g., `C:\ffmpeg\bin`).
+   - Click "OK" to close all windows.
+4. Open a command prompt and type `ffmpeg -version` to verify the installation.
+
 ## Explanation of the Functions
 ### Neural Network Training
 The nn_training folder contains the main files used when creating a neural network.
@@ -73,3 +85,12 @@ The ui folder contains the files used to create the user interface for our music
 
 #### genre_classifier_cli.py
 The genre_classifier_cli.py file contains the functions to create a command-line interface for our genre classification system. It allows users to input audio files and receive genre predictions. The main function in this file handles user input, processes audio files, and displays genre predictions using the trained neural network model.
+
+### Audio Conversion
+The audio conversion folder contains two sets of files. They aim to convert audio from one supported format to another with user inputs. It is aided by a testing suite to check its functionality. It contains an audio_conversion.py file and a tests.py file.
+
+### audio_conversion.py
+The audio_converion.py file is a script for converting audio files from one format to another, using the Pydub/FFmpeg libraries. The main function takes an input file and the desired output format, first verifying it exists, then loading its audio content. If the output format is 'h5', it converts the audio to an HDF5 file, storing audio data, sample rate, and channel information. On the other hand, if it is all other audio formats, it exports the audio. Afterward, the script uses the feature extraction function from optimized_dataset to extract features from the converted audio file.
+
+### tests.py
+The tests.py file is a set of unittest. They include creating a 20-second audio clip in mp3 converted to wav. It tests for successful audio conversion, if the file does not exist, correct file format, and supported format.
