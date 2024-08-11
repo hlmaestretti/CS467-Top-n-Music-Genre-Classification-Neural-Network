@@ -21,6 +21,16 @@ To run the audio conversion successfully, you need to have FFmpeg installed on y
    - Click "OK" to close all windows.
 4. Open a command prompt and type `ffmpeg -version` to verify the installation.
 
+## Quick Start
+To test the individual files, use the following structure to test various files:
+
+- From the root repo directory use the following:
+```py -m directory.file```
+  - An example would be ```py -m nn_training.nn_training```
+
+
+#### Using with the UI
+
 ## Explanation of the Functions
 ### Neural Network Training
 The nn_training folder contains the main files used when creating a neural network.
