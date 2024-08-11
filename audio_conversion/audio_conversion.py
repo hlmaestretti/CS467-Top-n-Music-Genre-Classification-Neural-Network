@@ -1,6 +1,6 @@
 """
-The audio_conversion file contains functions that can be used to convert an audio file to any other type
-of audio.
+The audio_conversion file contains functions that can be used to convert an
+audio file to any other type of audio.
 """
 
 from pydub import AudioSegment
