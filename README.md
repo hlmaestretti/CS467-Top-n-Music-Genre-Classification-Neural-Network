@@ -9,9 +9,6 @@ To install the python packages, use the following command once you have copied t
 pip install -r requirements.txt
 ```
 
-#### Installing FFMPEG
-(installation guide goes here)
-
 ## Explanation of the Functions
 ### Neural Network Training
 The nn_training folder contains the main files used when creating a neural network.
