@@ -1,3 +1,8 @@
+"""
+This file is a set of unittests. It tests for successful audio conversion,
+if the file does not exist, correct file format, and supported format.
+"""
+
 import unittest
 import os
 from pydub.generators import Sine
