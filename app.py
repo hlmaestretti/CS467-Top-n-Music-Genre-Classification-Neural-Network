@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, jsonify
 import os
 import threading
-import time
 import shutil
 from nn_genre_guesser.genre_guesser import genre_guesser, interpret_predictions
 import joblib
