@@ -86,7 +86,7 @@ def train_nn():
 
     # Setting batch size and epoch
     batch_size = 256
-    epochs = 200
+    epochs = 400
 
     # Define callbacks
     early_stopping = EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True)
@@ -109,7 +109,7 @@ def train_nn():
               class_weight=class_weights)
 
     # Save the training
-    model.save('./nn_training/my_model', save_format='tf')
+    model.save('./nn_training/trained_model.keras')
     model.summary()
     print(x_test.shape, x_train.shape)
     print(unique_labels)
