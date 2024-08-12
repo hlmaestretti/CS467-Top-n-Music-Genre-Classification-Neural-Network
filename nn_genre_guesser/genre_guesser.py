@@ -68,12 +68,11 @@ def genre_guesser(model, file):
 
 if __name__ == '__main__':
     model = "./nn_training/trained_model.keras"
-    input_file = 'metal.00000.au'
+    input_file = 'classical.00000.au'
 
     results = genre_guesser(model, input_file)
 
-    labels = ("C:/Users/wwwhu/Desktop/CS467-Top-n-Music-Genre-Classification-Neural-Network/nn_training/"
-              "label_encoder.pkl")
+    labels = "./nn_training/label_encoder.pkl"
     # Load the LabelEncoder
     label_encoder = joblib.load(labels)
 

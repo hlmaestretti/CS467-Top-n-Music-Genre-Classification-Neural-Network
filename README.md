@@ -2,8 +2,14 @@
 
 ## General Overview
 
+## Installation
+#### Install the Python Packages
+To install the python packages, use the following command once you have copied the repo:
+```commandline
+pip install -r requirements.txt
+```
 
-## Installation Guide for FFmpeg
+#### Installation Guide for FFmpeg
 To run the audio conversion successfully, you need to have FFmpeg installed on your system. Below are the instructions for installing FFmpeg.
 
 1. Download the latest FFmpeg release from the official website: [FFmpeg Downloads](https://ffmpeg.org/download.html)
@@ -15,9 +21,16 @@ To run the audio conversion successfully, you need to have FFmpeg installed on y
    - Click "OK" to close all windows.
 4. Open a command prompt and type `ffmpeg -version` to verify the installation.
 
-
 ## Quick Start
-(Only if we plan to make this easier usable to other people)
+To test the individual files, use the following structure to test various files:
+
+- From the root repo directory use the following:
+```py -m directory.file```
+  - An example would be ```py -m nn_training.nn_training```
+
+
+#### Using with the UI
+
 ## Explanation of the Functions
 ### Neural Network Training
 The nn_training folder contains the main files used when creating a neural network.
