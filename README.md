@@ -30,6 +30,11 @@ To test the individual files, use the following structure to test various files:
 
 
 #### Using with the UI
+1. Open https://genreclassifier.pythonanywhere.com/ in your browser.
+2. Click the "Choose File" button to select an audio file from your computer. The supported file types are MP3, WAV, and OGG. Once you've selected a file, its name will appear under the button.
+3. Click the "Classify" button to start the genre classification process. While the file is being processed, you'll see a loading animation.
+4. After processing, the results will be displayed on the screen. You'll see a list of genres with their corresponding confidence scores, sorted from highest to lowest. These are insights into the musical characteristics of your file.
+5. You can repeat the process with different audio files to classify multiple songs.
 
 ## Explanation of the Functions
 ### Neural Network Training
