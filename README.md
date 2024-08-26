@@ -36,6 +36,9 @@ To test the individual files, use the following structure to test various files:
 4. After processing, the results will be displayed on the screen. You'll see a list of genres with their corresponding confidence scores, sorted from highest to lowest. These are insights into the musical characteristics of your file.
 5. You can repeat the process with different audio files to classify multiple songs.
 
+The app.py file serves as the backend for the web interface. The index.html file is the template for the web interface. Run py -m app from the root repo directory to run app.py locally.
+
+
 ## Explanation of the Functions
 ### Neural Network Training
 The nn_training folder contains the main files used when creating a neural network.
